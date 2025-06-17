@@ -1,0 +1,127 @@
+        se(novoTexto !== nulo && novoTexto.aparar() !== '') {
+          tarefas[idx].texto = novoTexto.aparar();
+          Armazenamento local.definirItem('tarefas de estudo', JSON.stringificar(tarefas));
+          carregarTarefas de Estudo();
+        }
+      };
+
+      // Botão excluir
+      constante btnDel = documento.criarElemento('botão');
+      btnDel.título = 'Excluir';
+      btnDel.HTML interno = '❌';
+      btnDel.ao clicar = () => {
+        se(confirmar('Excluir tarefa?')) {
+          tarefas.emenda(idx,1);
+          Armazenamento local.definirItem('tarefas de estudo', JSON.stringificar(tarefas));
+          carregarTarefas de Estudo();
+        }
+      };
+
+      li.appendChild(verificar);
+      li.appendChild(infoDiv);
+      li.appendChild(btnEdit);
+      li.appendChild(btnDel);
+      ul.appendChild(li);
+    });
+  }
+
+  função adicionar tarefa de estudo() {
+    constante texto = documento.obterElementoPorId('studyTaskInput').valor.aparar();
+    constante data = documento.obterElementoPorId('datadatarefadeestudo').valor;
+    constante tempo = documento.obterElementoPorId('studyTaskTime').valor;
+    constante obs = documento.obterElementoPorId('studyTaskObs').valor.aparar();
+    se(!texto) retornar alerta('Digite uma tarefa de estudo válida!');
+    constante tarefas = JSON.analisar(Armazenamento local.obterItem('tarefas de estudo') || '[]');
+    tarefas.empurrar({texto,data,tempo,obs, feito:falso});
+    Armazenamento local.definirItem('tarefas de estudo', JSON.stringificar(tarefas));
+    // Limpar entradas
+    documento.obterElementoPorId('studyTaskInput').valor = '';
+    documento.obterElementoPorId('datadatarefadeestudo').valor = '';
+    documento.obterElementoPorId('studyTaskTime').valor = '';
+    documento.obterElementoPorId('studyTaskObs').valor = '';
+    carregarTarefas de Estudo();
+  }
+
+  // --- Planejador de Trabalho ---
+  função carregarTarefas de Trabalho() {
+    constante ul = documento.obterElementoPorId('lista de tarefas de trabalho');
+    ul.HTML interno = '';
+    constante tarefas = JSON.analisar(Armazenamento local.obterItem('Tarefas de trabalho') || '[]');
+    tarefas.para cada((tarefa, idx) => {
+      constante li = documento.criarElemento('li');
+      li.nomedaclasse = tarefa.feito?'feito':'';
+
+      constante infoDiv = documento.criarElemento('div');
+      infoDiv.HTML interno = `<forte>${tarefa.texto}</strong><br/><pequeno>${tarefa.data || ''} ${tarefa.tempo || ''}</pequeno><br/><em>${tarefa.obs || ''}</em>`;
+
+      // Caixa de seleção feita
+      constante verificar = documento.criarElemento('entrada');
+      verificar.tipo = 'caixa de seleção';
+      verificar.verificado = tarefa.feito;
+      verificar.em troca = () => {
+        tarefas[idx].feito = verificar.verificado;
+        Armazenamento local.definirItem('Tarefas de trabalho', JSON.stringificar(tarefas));
+        carregarTarefas de Trabalho();
+      };
+
+      // Botão editar
+      constante btnEdit = documento.criarElemento('botão');
+      btnEdit.título = 'Editar';
+      btnEdit.HTML interno = '✏️';
+      btnEdit.ao clicar = () => {
+        constante novoTexto = incitar('Editar tarefa de trabalho:', tarefa.texto);
+        se(novoTexto !== nulo && novoTexto.aparar() !== '') {
+          tarefas[idx].texto = novoTexto.aparar();
+          Armazenamento local.definirItem('Tarefas de trabalho', JSON.stringificar(tarefas));
+          carregarTarefas de Trabalho();
+        }
+      };
+
+      // Botão excluir
+      constante btnDel = documento.criarElemento('botão');
+      btnDel.título = 'Excluir';
+      btnDel.HTML interno = '❌';
+      btnDel.ao clicar = () => {
+        se(confirmar('Excluir tarefa?')) {
+          tarefas.emenda(idx,1);
+          Armazenamento local.definirItem('Tarefas de trabalho', JSON.stringificar(tarefas));
+          carregarTarefas de Trabalho();
+        }
+      };
+
+      li.appendChild(verificar);
+      li.appendChild(infoDiv);
+      li.appendChild(btnEdit);
+      li.appendChild(btnDel);
+      ul.appendChild(li);
+    });
+  }
+
+  função adicionarTarefaDeTrabalho() {
+    constante texto = documento.obterElementoPorId('workTaskInput').valor.aparar();
+    constante data = documento.obterElementoPorId('datadatarefadetrabalho').valor;
+    constante tempo = documento.obterElementoPorId('hora_de_trabalho').valor;
+    constante obs = documento.obterElementoPorId('workTaskObs').valor.aparar();
+    se(!texto) retornar alerta('Digite uma tarefa de trabalho válida!');
+    constante tarefas = JSON.analisar(Armazenamento local.obterItem('Tarefas de trabalho') || '[]');
+    tarefas.empurrar({texto,data,tempo,obs, feito:falso});
+    Armazenamento local.definirItem('Tarefas de trabalho', JSON.stringificar(tarefas));
+    // Limpar entradas
+    documento.obterElementoPorId('workTaskInput').valor = '';
+    documento.obterElementoPorId('datadatarefadetrabalho').valor = '';
+    documento.obterElementoPorId('hora_de_trabalho').valor = '';
+    documento.obterElementoPorId('workTaskObs').valor = '';
+    carregarTarefas de Trabalho();
+  }
+
+  // Carregar dados ao iniciar a página
+  janela.carregar = () => {
+    carregarListaDeVerificação();
+    carregarTarefas de Estudo();
+    carregarTarefas de Trabalho();
+    updateTimerDisplay();
+  };
+</roteiro>
+
+</corpo>
+</HTML>
