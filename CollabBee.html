@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CollabBee - MVP Completo</title>
+  <style>
+    :root {
+      --amarelo: #fdd835;
+      --preto: #212121;
+      --branco: #fff;
+      --cinza: #f4f4f4;
+      --cinza-escuro: #999;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--cinza);
+      color: var(--preto);
+      padding: 1rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+    header, footer {
+      background: var(--amarelo);
+      text-align: center;
+      padding: 1rem;
+      border-radius: 0.8rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    header h1, footer p {
+      font-weight: 700;
+      color: var(--preto);
+    }
+    main {
+      flex-grow: 1;
+      max-width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+    }
+    section {
+      background: var(--branco);
+      padding: 1.5rem 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h2 {
+      margin-bottom: 1rem;
+      border-bottom: 3px solid var(--amarelo);
+      padding-bottom: 0.5rem;
+    }
+    /* Geral inputs e botões */
+    input[type=text], input[type=date], input[type=time], textarea {
+      padding: 0.5rem;
+      margin: 0.3rem 0.5rem 0.7rem 0;
+      border-radius: 0.5rem;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      width: auto;
+      max-width: 300px;
+      vertical-align: middle;
+      font-family: inherit;
+      resize: vertical;
+    }
+    textarea {
+      width: 100%;
+      max-width: 100%;
+      min-height: 60px;
+    }
+    button {
+      background: var(--amarelo);
+      border: none;
+      color: var(--preto);
+      font-weight: 700;
+      padding: 0.5rem 1.2rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+      vertical-align: middle;
+    }
+    button:hover {
+      background: #fbc02d;
+    }
+    ul {
+      list-style: none;
+      padding-left: 0;
+      margin-top: 1rem;
+      max-width: 600px;
+    }
+    ul li {
+      background: var(--cinza);
+      margin-bottom: 0.5rem;
+      border-radius: 0.5rem;
+      padding: 0.5rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 1rem;
+      word-break: break-word;
+    }
+    ul li.done {
+      text-decoration: line-through;
+      opacity: 0.5;
+      color: var(--cinza-escuro);
+    }
+    ul li div {
+      flex-grow: 1;
+      margin-left: 0.5rem;
+    }
+    ul li button {
+      margin-left: 0.5rem;
+      background: transparent;
+      color: var(--preto);
+      font-size: 1.2rem;
+      padding: 0;
+      border: none;
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+    ul li button:hover {
+      color: red;
+    }
+    /* Tabelas para exemplos */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 0.6rem;
+      text-align: left;
+    }
+    th {
+      background-color: var(--amarelo);
+    }
+    /* Cronômetro */
+    #timer {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--preto);
+    }
+    #timer-controls button {
+      margin-right: 1rem;
+    }
+    /* Responsivo */
+    @media (max-width: 600px) {
+      input[type=text], input[type=date], input[type=time] {
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 0.5rem;
+      }
+      ul, table {
+        font-size: 0.85rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🐝 CollabBee - MVP Completo</h1>
+</header>
+
+<main>
+
+  <!-- Missão, Visão, Valores -->
+  <section id="missao-visao-valores">
+    <h2>🚀 Versão MVP - Missão, Visão e Valores</h2>
+    <p><strong>Missão:</strong> Facilitar a organização pessoal e profissional, promovendo colaboração e eficiência.</p>
+    <p><strong>Visão:</strong> Ser a plataforma referência para pessoas que buscam transformar sua rotina de forma simples e funcional.</p>
+    <p><strong>Valores:</strong> Inovação, simplicidade, colaboração, transparência e comprometimento.</p>
+    <p><em>Desenvolvido por Samuel Dantas</em></p>
+  </section>
+
+  <!-- Check-list diário -->
+  <section id="checklist-diario">
+    <h2>✅ Check-list Diário</h2>
+    <input type="text" id="checkInput" placeholder="Digite a tarefa diária..." />
+    <button onclick="addCheckItem()">Adicionar</button>
+    <ul id="checkList"></ul>
+  </section>
+
+  <!-- Cronômetro de uso livre -->
+  <section id="cronometro">
+    <h2>⏱ Cronômetro Livre</h2>
+    <div id="timer">00:00:00</div>
+    <div id="timer-controls">
+      <button onclick="startTimer()">Iniciar</button>
+      <button onclick="pauseTimer()">Pausar</button>
+      <button onclick="resetTimer()">Resetar</button>
+    </div>
+  </section>
+
+  <!-- Planejador de Estudos -->
+  <section id="planejador-estudos">
+    <h2>📚 Planejador de Estudos</h2>
+    <input type="text" id="studyTaskInput" placeholder="Digite a tarefa de estudo..." />
+    <input type="date" id="studyTaskDate" />
+    <input type="time" id="studyTaskTime" />
+    <textarea id="studyTaskObs" placeholder="Observações..."></textarea><br/>
+    <button onclick="addStudyTask()">Adicionar</button>
+
+    <ul id="studyTaskList"></ul>
+
+    <h3>📋 Exemplo de Rotina de Estudos</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Horário</th><th>Atividade</th><th>Observações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>07:00 - 08:00</td><td>Estudo de Matemática</td><td>Resolver exercícios de geometria</td></tr>
+        <tr><td>08:30 - 09:30</td><td>Leitura de Português</td><td>Capítulo 3 do livro "Dom Casmurro"</td></tr>
+        <tr><td>10:00 - 11:00</td><td>Ciências</td><td>Revisão sobre ecossistemas</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Planejador de Trabalho -->
+  <section id="planejador-trabalho">
+    <h2>🗂️ Planejador de Trabalho</h2>
+    <input type="text" id="workTaskInput" placeholder="Digite a tarefa de trabalho..." />
+    <input type="date" id="workTaskDate" />
+    <input type="time" id="workTaskTime" />
+    <textarea id="workTaskObs" placeholder="Observações..."></textarea><br/>
+    <button onclick="addWorkTask()">Adicionar</button>
+
+    <ul id="workTaskList"></ul>
+
+    <h3>📋 Exemplo de Rotina de Trabalho</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Horário</th><th>Atividade</th><th>Observações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>09:00 - 10:00</td><td>Reunião com equipe</td><td>Definir metas semanais</td></tr>
+        <tr><td>10:30 - 12:00</td><td>Desenvolvimento de projeto</td><td>Implementar novas funcionalidades</td></tr>
+        <tr><td>14:00 - 15:00</td><td>Resposta a e-mails</td><td>Organizar demandas prioritárias</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+</main>
+
+<footer>
+  <p>© 2025 CollabBee - Desenvolvido por Samuel Dantas</p>
+</footer>
+
+<script>
+  // --- Check-list diário ---
+  function loadCheckList() {
+    const ul = document.getElementById('checkList');
+    ul.innerHTML = '';
+    const items = JSON.parse(localStorage.getItem('checkListItems') || '[]');
+    items.forEach((item, idx) => {
+      const li = document.createElement('li');
+      li.className = item.done ? 'done' : '';
+      const div = document.createElement('div');
+      div.textContent = item.text;
+
+      // Checkbox para marcar feito
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.checked = item.done;
+      checkbox.onchange = () => {
+        items[idx].done = checkbox.checked;
+        localStorage.setItem('checkListItems', JSON.stringify(items));
+        loadCheckList();
+      };
+
+      // Botão editar
+      const btnEdit = document.createElement('button');
+      btnEdit.title = 'Editar';
+      btnEdit.innerHTML = '✏️';
+      btnEdit.onclick = () => {
+        const novoTexto = prompt('Editar tarefa:', item.text);
+        if (novoTexto !== null && novoTexto.trim() !== '') {
+          items[idx].text = novoTexto.trim();
+          localStorage.setItem('checkListItems', JSON.stringify(items));
+          loadCheckList();
+        }
+      };
+
+      // Botão excluir
+      const btnDel = document.createElement('button');
+      btnDel.title = 'Excluir';
+      btnDel.innerHTML = '❌';
+      btnDel.onclick = () => {
+        if(confirm('Excluir tarefa?')) {
+          items.splice(idx,1);
+          localStorage.setItem('checkListItems', JSON.stringify(items));
+          loadCheckList();
+        }
+      };
+
+      li.appendChild(checkbox);
+      li.appendChild(div);
+      li.appendChild(btnEdit);
+      li.appendChild(btnDel);
+      ul.appendChild(li);
+    });
+  }
+
+  function addCheckItem() {
+    const input = document.getElementById('checkInput');
+    const val = input.value.trim();
+    if(val === '') return alert('Digite uma tarefa válida!');
+    const items = JSON.parse(localStorage.getItem('checkListItems') || '[]');
+    items.push({text: val, done: false});
+    localStorage.setItem('checkListItems', JSON.stringify(items));
+    input.value = '';
+    loadCheckList();
+  }
+
+  // --- Cronômetro Livre ---
+  let timerInterval = null;
+  let timerSeconds = 0;
+  const timerDisplay = document.getElementById('timer');
+
+  function updateTimerDisplay() {
+    const h = String(Math.floor(timerSeconds / 3600)).padStart(2,'0');
+    const m = String(Math.floor((timerSeconds % 3600) / 60)).padStart(2,'0');
+    const s = String(timerSeconds % 60).padStart(2,'0');
+    timerDisplay.textContent = `${h}:${m}:${s}`;
+  }
+
+  function startTimer() {
+    if(timerInterval) return;
+    timerInterval = setInterval(() => {
+      timerSeconds++;
+      updateTimerDisplay();
+    }, 1000);
+  }
+
+  function pauseTimer() {
+    clearInterval(timerInterval);
+    timerInterval = null;
+  }
+
+  function resetTimer() {
+    pauseTimer();
+    timerSeconds = 0;
+    updateTimerDisplay();
+  }
+
+  // --- Planejador de Estudos ---
+  function loadStudyTasks() {
+    const ul = document.getElementById('studyTaskList');
+    ul.innerHTML = '';
+    const tasks = JSON.parse(localStorage.getItem('studyTasks') || '[]');
+    tasks.forEach((task, idx) => {
+      const li = document.createElement('li');
+      li.className = task.done ? 'done' : '';
+
+      const infoDiv = document.createElement('div');
+      infoDiv.innerHTML = `<strong>${task.text}</strong><br/><small>${task.date || ''} ${task.time || ''}</small><br/><em>${task.obs || ''}</em>`;
+
+      // Checkbox feito
+      const check = document.createElement('input');
+      check.type = 'checkbox';
+      check.checked = task.done;
+      check.onchange = () => {
+        tasks[idx].done = check.checked;
+        localStorage.setItem('studyTasks', JSON.stringify(tasks));
+        loadStudyTasks();
+      };
+
+      // Botão editar
+      const btnEdit = document.createElement('button');
+      btnEdit.title = 'Editar';
+      btnEdit.innerHTML = '✏️';
+      btnEdit.onclick = () => {
+        const novoTexto = prompt('Editar tarefa de estudo:', task.text);
+        if(novoTexto !== null && novoTexto.trim() !== '') {
+          tasks[idx].text = novoTexto.trim();
+          localStorage.setItem('studyTasks', JSON.stringify(tasks));
+          loadStudyTasks();
+        }
+      };
+
+      // Botão excluir
+      const btnDel = document.createElement('button');
+      btnDel.title = 'Excluir';
+      btnDel.innerHTML = '❌';
+      btnDel.onclick = () => {
+        if(confirm('Excluir tarefa?')) {
+          tasks.splice(idx,1);
+          localStorage.setItem('studyTasks', JSON.stringify(tasks));
+          loadStudyTasks();
+        }
+      };
+
+      li.appendChild(check);
+      li.appendChild(infoDiv);
+      li.appendChild(btnEdit);
+      li.appendChild(btnDel);
+      ul.appendChild(li);
+    });
+  }
+
+  function addStudyTask() {
+    const text = document.getElementById('studyTaskInput').value.trim();
+    const date = document.getElementById('studyTaskDate').value;
+    const time = document.getElementById('studyTaskTime').value;
+    const obs = document.getElementById('studyTaskObs').value.trim();
+    if(!text) return alert('Digite uma tarefa de estudo válida!');
+    const tasks = JSON.parse(localStorage.getItem('studyTasks') || '[]');
+    tasks.push({text, date, time, obs, done:false});
+    localStorage.setItem('studyTasks', JSON.stringify(tasks));
+    // Limpar inputs
+    document.getElementById('studyTaskInput').value = '';
+    document.getElementById('studyTaskDate').value = '';
+    document.getElementById('studyTaskTime').value = '';
+    document.getElementById('studyTaskObs').value = '';
+    loadStudyTasks();
+  }
+
+  // --- Planejador de Trabalho ---
+  function loadWorkTasks() {
+    const ul = document.getElementById('workTaskList');
+    ul.innerHTML = '';
+    const tasks = JSON.parse(localStorage.getItem('workTasks') || '[]');
+    tasks.forEach((task, idx) => {
+      const li = document.createElement('li');
+      li.className = task.done ? 'done' : '';
+
+      const infoDiv = document.createElement('div');
+      infoDiv.innerHTML = `<strong>${task.text}</strong><br/><small>${task.date || ''} ${task.time || ''}</small><br/><em>${task.obs || ''}</em>`;
+
+      // Checkbox feito
+      const check = document.createElement('input');
+      check.type = 'checkbox';
+      check.checked = task.done;
+      check.onchange = () => {
+        tasks[idx].done = check.checked;
+        localStorage.setItem('workTasks', JSON.stringify(tasks));
+        loadWorkTasks();
+      };
+
+      // Botão editar
+      const btnEdit = document.createElement('button');
+      btnEdit.title = 'Editar';
+      btnEdit.innerHTML = '✏️';
+      btnEdit.onclick = () => {
+        const novoTexto = prompt('Editar tarefa de trabalho:', task.text);
+        if(novoTexto !== null && novoTexto.trim() !== '') {
+          tasks[idx].text = novoTexto.trim();
+          localStorage.setItem('workTasks', JSON.stringify(tasks));
+          loadWorkTasks();
+        }
+      };
+
+      // Botão excluir
+      const btnDel = document.createElement('button');
+      btnDel.title = 'Excluir';
+      btnDel.innerHTML = '❌';
+      btnDel.onclick = () => {
+        if(confirm('Excluir tarefa?')) {
+          tasks.splice(idx,1);
+          localStorage.setItem('workTasks', JSON.stringify(tasks));
+          loadWorkTasks();
+        }
+      };
+
+      li.appendChild(check);
+      li.appendChild(infoDiv);
+      li.appendChild(btnEdit);
+      li.appendChild(btnDel);
+      ul.appendChild(li);
+    });
+  }
+
+  function addWorkTask() {
+    const text = document.getElementById('workTaskInput').value.trim();
+    const date = document.getElementById('workTaskDate').value;
+    const time = document.getElementById('workTaskTime').value;
+    const obs = document.getElementById('workTaskObs').value.trim();
+    if(!text) return alert('Digite uma tarefa de trabalho válida!');
+    const tasks = JSON.parse(localStorage.getItem('workTasks') || '[]');
+    tasks.push({text, date, time, obs, done:false});
+    localStorage.setItem('workTasks', JSON.stringify(tasks));
+    // Limpar inputs
+    document.getElementById('workTaskInput').value = '';
+    document.getElementById('workTaskDate').value = '';
+    document.getElementById('workTaskTime').value = '';
+    document.getElementById('workTaskObs').value = '';
+    loadWorkTasks();
+  }
+
+  // Carregar dados ao iniciar a página
+  window.onload = () => {
+    loadCheckList();
+    loadStudyTasks();
+    loadWorkTasks();
+    updateTimerDisplay();
+  };
+</script>
+
+</body>
+</html>
